@@ -1,151 +1,92 @@
-Tea production in Darjeeling-like regions is shaped by climate, soil conditions, vegetation health, and management practices. However, long-term yield data is scarce and fragmented.
+# Tea Yield Prediction Using Climate, Remote Sensing and ERW
 
-To address this, the project:
+This project studies tea yield in Darjeeling-like regions using climate, vegetation, management and ERW-related features.
 
-Builds a multi-decadal (1940–2025) dataset using real measurements + statistically grounded synthetic generation
+The goal is to build a long-term dataset and use machine learning to predict annual tea yield and driving factors of the same.
 
-Uses remote sensing (NDVI, RVI) to capture vegetation dynamics
+## Dataset
 
-Trains an XGBoost regression model to predict annual tea yield
+The dataset covers 1940-2025 and combines real data with statistically generated historical estimates.
 
-Incorporates ERW as a predictive feature
+Real data includes:
 
-Conducts detailed analysis using feature importance, correlations, and time-series behavior
+- IMD rainfall data
+- Daily temperature data
+- NDVI and RVI
+- Fertilizer and yield records from Kamala Tea Gardens
+- Cropping intensity data
 
-Key Components
-1. Multi-Decadal Dataset Construction
+For earlier years where complete data was not available, values were estimated using:
 
-A unified dataset was created by combining:
+- Gaussian process extrapolation
+- Trend-based estimation
+- Historical averages and variation
+- Controlled smoothing
 
-Real data sources
+## Model
 
-IMD rainfall (gridded datasets, CRIS)
+The main model used is XGBoost Regressor.
 
-Daily temperature (WeatherAndClimate.eu)
+The pipeline includes:
 
-Computed NDVI & RVI via Google Earth / remote sensing workflows
+- Data cleaning
+- Feature selection
+- 80:20 train-test split
+- Model training
+- Prediction
+- Evaluation
+- Feature importance analysis
 
-Fertiliser & yield records from Kamala Tea Gardens (2017–2024)
+## Results
 
-Cropping intensity from Siliguri tehsil datasets
+With NDVI and RVI:
 
-Synthetic extensions
+- R2: approximately 0.94
+- RMSE: approximately 250-300 kg/ha
 
-To cover 1940–2016:
+Without NDVI and RVI:
 
-Gaussian processes for NDVI/RVI extrapolation
+- R2: approximately 0.63
+- RMSE: approximately 358 kg/ha
 
-Trend-guided inference for fertilizer practices & cropping intensity
+This shows that remote sensing features add significant predictive value.
 
-Yield reconstruction using:
+## Feature Importance
 
-Mean + SD anchoring
+The most important features were:
 
-Historical agronomic phases
+- NDVI
+- Cropping intensity
+- RVI
+- ERW indicator
+- Fertilizer quantity
 
-Controlled smoothing + variance modeling
+Climate variables had a smaller direct effect in the model.
 
-This produced the first robust long-term dataset integrating climate × vegetation × management × ERW.
+## ERW
 
-Machine Learning Pipeline
+Enhanced Rock Weathering was added as a binary feature for 2024-2025.
 
-Model: XGBoost Regressor
+Since there are only a few years of ERW data, the project does not make causal claims about its effect on yield.
 
-Pipeline steps:
+The current goal is to include ERW in the prediction framework and study its effect as more data becomes available.
 
-Data cleaning & encoding
+## Visualisations
 
-Feature-target separation
+The project includes:
 
-80:20 train-test split
+- Predicted vs actual yield plots
+- Yield time-series plots
+- Feature importance plots
+- Correlation heatmaps
+- NDVI and RVI trends
+- Decadal yield summaries
 
-Model training with tuned hyperparameters
 
-Prediction, regression metrics, and time-series evaluation
+## Future Work
 
-Feature importance analysis
-
-Results
-With NDVI + RVI
-
-R² ≈ 0.94
-
-RMSE ~250–300 kg/ha
-
-Accurately captures long-run yield levels and trends
-
-Without NDVI + RVI
-
-R² ≈ 0.63
-
-RMSE ~358 kg/ha
-
-Shows strong dependence on remote-sensing features
-
-Interpretability Highlights
-
-NDVI = most important feature
-
-Followed by cropping intensity, RVI, ERW indicator, and fertilizer quantity
-
-Climate variables have modest direct impact
-
-Time-series plots show correct trend modeling with expected smoothing of extremes
-
-Enhanced Rock Weathering (ERW) Integration
-
-ERW was introduced only in 2024–2025.
-The project:
-
-Encodes ERW as a binary feature
-
-Examines model behavior in ERW years
-
-Notes that causal effects cannot be inferred due to limited treated years
-
-Demonstrates how ERW can be incorporated into predictive frameworks for future analysis
-
-Visual & Analytical Outputs
-
-The project generates:
-
-Predicted vs actual yield scatterplots
-
-Time-series plots across 85+ years
-
-Feature importance rankings
-
-Correlation heatmaps
-
-NDVI/RVI yearly trajectories
-
-Decadal yield summaries
-
-These enable scientific interpretation of vegetation–climate–yield relationships.
-
-Tech Stack
-
-Python
-
-Pandas, NumPy
-
-Scikit-Learn, XGBoost
-
-Matplotlib, Seaborn
-
-Remote Sensing (NDVI, RVI workflows)
-
-Future Scope
-
-This framework is designed to scale with new data.
-Next steps include:
-
-Integrating multi-estate datasets
-
-Expanding ERW data for causal modeling
-
-Deploying forecasting pipelines for real-time estate support
-
-Scenario modeling under climate-change projections
-
-As richer real-world satellite and estate-level data becomes available, this system can evolve into a full agricultural forecasting engine.
+- Add data from more tea estates
+- Add more ERW data
+- Improve satellite data coverage
+- Build forecasting models
+- Test climate change scenarios
